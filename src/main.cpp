@@ -40,7 +40,7 @@ else if(command.substr(0,4)=="type"){
       while(std::getline(ss_path,path,':')){
         std::string full_path=path + '/' + command;
         if(access(full_path.c_str(),X_OK)==0){
-          std::cout << command << " is " << command << std::endl;
+          std::cout << command << " is " << full_path << std::endl;
           break;
         }
       }
