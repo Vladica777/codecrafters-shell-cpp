@@ -29,6 +29,9 @@ else if(command.substr(0,4)=="type"){
     
   else if(command.substr(5,8)=="type")
     std::cout << command.substr(5,8)<< " is a shell builtin" << std::endl;
+
+    else 
+    std::cout << command.substr(5,8) << ": not found";
 }
 
   else{
