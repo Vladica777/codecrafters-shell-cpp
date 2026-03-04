@@ -19,8 +19,8 @@ if(command=="exit"){
 else if(command.substr(0,5)=="echo"){
   std::cout << command.substr(5) << std::endl;
 }
-
-  std::cout<<command <<": command not found" << "\n";
+  else{
+  std::cout<<command <<": command not found" << "\n";}
   }
 
 }
