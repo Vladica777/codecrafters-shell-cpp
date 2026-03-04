@@ -38,9 +38,9 @@ else if(command.substr(0,4)=="type"){
       std::stringstream ss_path(path_env);
       std::string path;
       while(std::getline(ss_path,path,':')){
-        std::string full_path=path + '/' + command;
+        std::string full_path=path + '/' + command.substr(5);
         if(access(full_path.c_str(),X_OK)==0){
-          std::cout << command << " is " << full_path << std::endl;
+          std::cout << command.substr(5) << " is " << full_path << std::endl;
           break;
         }
       }
