@@ -47,7 +47,7 @@ else if(command.substr(0,4)=="type"){
         }
       }
        if(!found)
-            std::cout << command.substr(5) << ": command not found" << std::endl;
+            std::cout << command.substr(5) << ": not found" << std::endl;
     }
 
 }
