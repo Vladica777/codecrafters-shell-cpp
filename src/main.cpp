@@ -1,5 +1,8 @@
 #include <iostream>
 #include <string>
+#include <sstream>
+#include <unistd.h>
+
 
 int main() {
   
@@ -30,8 +33,19 @@ else if(command.substr(0,4)=="type"){
   else if(command.substr(5,8)=="type")
     std::cout << command.substr(5,8)<< " is a shell builtin" << std::endl;
 
-    else 
-    std::cout << command.substr(5) << ": not found" << std::endl;
+    else{
+      std::string path_env=std::getenv("PATH");
+      std::stringstream ss_path(path_env);
+      std::string path;
+      while(std::getline(ss_path,path,':')){
+        std::string full_path=path + '/' + command;
+        if(access(full_path.c_str(),X_OK)==0){
+          std::cout << command << " is " << command << std::endl;
+          break;
+        }
+      }
+    }
+
 }
 
   else{
