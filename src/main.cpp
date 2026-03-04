@@ -37,12 +37,16 @@ else if(command.substr(0,4)=="type"){
       std::string path_env=std::getenv("PATH");
       std::stringstream ss_path(path_env);
       std::string path;
+      bool found=false;
       while(std::getline(ss_path,path,':')){
         std::string full_path=path + '/' + command.substr(5);
         if(access(full_path.c_str(),X_OK)==0){
           std::cout << command.substr(5) << " is " << full_path << std::endl;
+          found=true;
           break;
         }
+        if(!found)
+            std::cout << command.substr(5) << ": not found" << std::endl;
       }
     }
 
