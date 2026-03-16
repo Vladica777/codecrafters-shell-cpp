@@ -29,11 +29,17 @@ int main()
       std::cout << command.substr(5) << std::endl;
     }
 
+    else if(command.substr(0,3)=="pwd"){
+      char path[1024];
+      if(getcwd(path,sizeof(path)!=NULL))
+        std::cout << path << std::endl;
+    }
+
     else if (command.substr(0, 4) == "type")
     {
       std::string target = command.substr(5);
 
-      if (target == "echo" || target == "exit" || target == "type")
+      if (target == "echo" || target == "exit" || target == "type" || target=="pwd")
       {
         std::cout << target << " is a shell builtin" << std::endl;
       }
