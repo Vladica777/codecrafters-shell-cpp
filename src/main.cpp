@@ -98,7 +98,10 @@ int main()
           found = true;
           break;
         }
-        if (!found)
+        
+      }
+
+      if (!found)
         {
           std::cout << args[0] << ": command not found" << std::endl;
           continue;
@@ -123,7 +126,7 @@ int main()
         {
           waitpid(pid, nullptr, 0);
         }
-      }
+
     }
   }
   return 0;
