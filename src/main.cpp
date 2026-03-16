@@ -31,7 +31,7 @@ int main()
 
     else if(command.substr(0,3)=="pwd"){
       char path[1024];
-      if(getcwd(path,sizeof(path)) != nullptr))
+      if(getcwd(path,sizeof(path)) != nullptr)
         std::cout << path << std::endl;
     }
 
