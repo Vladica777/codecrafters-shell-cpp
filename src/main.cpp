@@ -41,14 +41,29 @@ int main()
       std::string path;
       std::string cd;
       iss >> cd;
-     
+
       if (iss >> path && cd=="cd")
       {
+        if(path=="~"){
+          char *home=getenv("HOME");
 
-        if (chdir(path.c_str()) != 0)
+          if(home!=nullptr){
+            if(chdir(home)!=0){
+              std::cout << "cd: " << path << ": No such file or directory" << std::endl;
+            }
+          } 
+          else {
+            std::cout << "cd: " << path << ": No such file or directory" << std::endl;
+          }
+        }
+
+        else if (chdir(path.c_str()) != 0)
         {
           std::cout << "cd: " << path << ": No such file or directory" << std::endl;
         }
+
+        
+
       }
       }
 
