@@ -35,19 +35,23 @@ int main()
         std::cout << path << std::endl;
     }
     else if(command.substr(0,2)== "cd"){
-      std::string path=command.substr(3);
-      if(path[0]=='/'){
-          if(chdir(path.c_str())!=0){
-            std::cout << "cd: " << path << ": No such file or directory" << std::endl;
-          }
-        }
+      std::stringstream iss(command);
+      std::string path;
+      while(iss >> path){
+        if(path!="cd")
+        break;
+      }
+      if (chdir(path.c_str()) != 0)
+    {
+      std::cout << "cd: " << path << ": No such file or directory" << std::endl;
+    }
     }
 
     else if (command.substr(0, 4) == "type")
     {
       std::string target = command.substr(5);
 
-      if (target == "echo" || target == "exit" || target == "type" || target=="pwd")
+      if (target == "echo" || target == "exit" || target == "type" || target=="pwd" || target=="cd")
       {
         std::cout << target << " is a shell builtin" << std::endl;
       }
