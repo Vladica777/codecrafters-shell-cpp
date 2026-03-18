@@ -34,6 +34,14 @@ int main()
       if(getcwd(path,sizeof(path)) != nullptr)
         std::cout << path << std::endl;
     }
+    else if(command.substr(0,2)== "cd"){
+      std::string path=command.substr(3);
+      if(path[0]=='/'){
+          if(chdir(path.c_str())!=0){
+            std::cout << "cd: " << path << ": No such file or directory" << std::endl;
+          }
+        }
+    }
 
     else if (command.substr(0, 4) == "type")
     {
