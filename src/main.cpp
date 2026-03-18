@@ -29,34 +29,80 @@ int main()
       std::cout << command.substr(5) << std::endl;
     }
 
-    else if(command.substr(0,3)=="pwd"){
+    else if (command.substr(0, 3) == "pwd")
+    {
       char path[1024];
-      if(getcwd(path,sizeof(path)) != nullptr)
+      if (getcwd(path, sizeof(path)) != nullptr)
         std::cout << path << std::endl;
     }
-    else if(command.substr(0,2)== "cd"){
+    else if (command.substr(0, 2) == "cd")
+    {
       std::stringstream iss(command);
       std::string path;
-      while(iss >> path){
-        if(path!="cd")
-        break;
-      }
-      if (chdir(path.c_str()) != 0)
-    {
-      std::cout << "cd: " << path << ": No such file or directory" << std::endl;
-    }
-    }
-
-    else if (command.substr(0, 4) == "type")
-    {
-      std::string target = command.substr(5);
-
-      if (target == "echo" || target == "exit" || target == "type" || target=="pwd" || target=="cd")
+      std::string cd;
+      iss >> cd;
+     
+      if (iss >> path && cd=="cd")
       {
-        std::cout << target << " is a shell builtin" << std::endl;
+
+        if (chdir(path.c_str()) != 0)
+        {
+          std::cout << "cd: " << path << ": No such file or directory" << std::endl;
+        }
       }
+      }
+
+      else if (command.substr(0, 4) == "type")
+      {
+        std::string target = command.substr(5);
+
+        if (target == "echo" || target == "exit" || target == "type" || target == "pwd" || target == "cd")
+        {
+          std::cout << target << " is a shell builtin" << std::endl;
+        }
+        else
+        {
+
+          const char *path_cstr = std::getenv("PATH");
+          std::string path_env = path_cstr ? path_cstr : "";
+
+          std::stringstream ss_path(path_env);
+          std::string path;
+          std::string executable_path;
+          bool found = false;
+
+          while (std::getline(ss_path, path, ':'))
+          {
+            std::string full_path = path + '/' + target;
+
+            if (access(full_path.c_str(), X_OK) == 0)
+            {
+              std::cout << target << " is " << full_path << std::endl;
+              found = true;
+              break;
+            }
+          }
+
+          if (!found)
+          {
+            std::cout << target << ": not found" << std::endl;
+          }
+        }
+      }
+
       else
       {
+        std::istringstream iss(command);
+        std::vector<std::string> args;
+        std::string token;
+
+        while (iss >> token)
+        {
+          args.push_back(token);
+        }
+
+        if (args.empty())
+          continue;
 
         const char *path_cstr = std::getenv("PATH");
         std::string path_env = path_cstr ? path_cstr : "";
@@ -68,58 +114,16 @@ int main()
 
         while (std::getline(ss_path, path, ':'))
         {
-          std::string full_path = path + '/' + target;
-
+          std::string full_path = path + "/" + args[0];
           if (access(full_path.c_str(), X_OK) == 0)
           {
-            std::cout << target << " is " << full_path << std::endl;
+            executable_path = full_path;
             found = true;
             break;
           }
         }
 
         if (!found)
-        {
-          std::cout << target << ": not found" << std::endl;
-        }
-      }
-    }
-
-    else
-    {
-      std::istringstream iss(command);
-      std::vector<std::string> args;
-      std::string token;
-
-      while (iss >> token)
-      {
-        args.push_back(token);
-      }
-
-      if (args.empty())
-        continue;
-
-      const char *path_cstr = std::getenv("PATH");
-      std::string path_env = path_cstr ? path_cstr : "";
-
-      std::stringstream ss_path(path_env);
-      std::string path;
-      std::string executable_path;
-      bool found = false;
-
-      while (std::getline(ss_path, path, ':'))
-      {
-        std::string full_path = path + "/" + args[0];
-        if (access(full_path.c_str(), X_OK) == 0)
-        {
-          executable_path = full_path;
-          found = true;
-          break;
-        }
-        
-      }
-
-      if (!found)
         {
           std::cout << args[0] << ": command not found" << std::endl;
           continue;
@@ -144,8 +148,7 @@ int main()
         {
           waitpid(pid, nullptr, 0);
         }
-
+      }
     }
+    return 0;
   }
-  return 0;
-}
